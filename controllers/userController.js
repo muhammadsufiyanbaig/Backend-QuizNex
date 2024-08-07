@@ -59,7 +59,7 @@ async function getUser(req, res) {
   const { id } = req.body;
   try {
     const user = await findUserById(id);
-    // console.log(faculty);
+    // console.log(teacher);
     if (user.length === 0) {
       return res.status(404).json({ error: "User member not found" });
     }

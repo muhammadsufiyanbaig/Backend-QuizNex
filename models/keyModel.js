@@ -1,4 +1,4 @@
-const { sql } = require('../utils/db');
+const { sql } = require("../utils/db");
 
 async function createKeysTable() {
   await sql`

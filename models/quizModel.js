@@ -7,15 +7,15 @@ async function createQuizTables() {
       question TEXT,
       options TEXT[],
       correctAnswer TEXT[],
-      faculty INT,
-      FOREIGN KEY (faculty) REFERENCES faculty(id)
+      teacher INT,
+      FOREIGN KEY (teacher) REFERENCES teacher(id)
     )
   `;
   await sql`
     CREATE TABLE IF NOT EXISTS result (
       user_id INT PRIMARY KEY,
-      ts_quiz_score INT,
-      ts_quiz_timestamp TEXT,
+      quiz_score INT,
+      quiz_timestamp TEXT,
       FOREIGN KEY (user_id) REFERENCES users(id)
     )
   `;
@@ -31,7 +31,7 @@ async function addMultipleQuestions(TeacherId, questions) {
     await Promise.all(
       questions.map((question) =>
         sql`
-          INSERT INTO quizData (question, options, correctAnswer, faculty)
+          INSERT INTO quizData (question, options, correctAnswer, teacher)
           VALUES (${question.question}, ${question.options}, ${question.correctAnswer}, ${TeacherId})
         `
       )
