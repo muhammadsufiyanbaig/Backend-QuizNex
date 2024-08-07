@@ -24,9 +24,26 @@ async function insertTeacher(fullName, email, hashedPassword) {
   `;
 }
 
+async function updateTeacher(id, fullName, email, password) {
+  return sql`
+    UPDATE teacher
+    SET fullName = ${fullName}, email = ${email}, password = ${password}
+    WHERE id = ${id}
+  `;
+}
+
+async function deleteTeacher(id) {
+  return sql`
+    DELETE FROM teacher
+    WHERE id = ${id}
+  `;
+}
+
 module.exports = {
   createTeacherTable,
   findTeacherByEmail,
   findTeacherById,
   insertTeacher,
+  updateTeacher,
+  deleteTeacher,
 };

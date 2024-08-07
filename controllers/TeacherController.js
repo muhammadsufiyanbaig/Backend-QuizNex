@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const { generateToken } = require("../middleware/jwtUtils");
-const { findTeacherByEmail, insertTeacher, findTeacherById } = require("../models/TeacherModel");
+const { findTeacherByEmail, insertTeacher, findTeacherById, updateTeacher, deleteTeacher } = require("../models/TeacherModel");
 
 const keyCode = "QUIZWIZ_TEACHER";
 
@@ -80,9 +80,50 @@ async function logout(req, res) {
   res.status(200).json({ success: true, message: "User logged out successfully" });
 }
 
+async function updateTeacherInfo(req, res) {
+  const { id, fullName, email, password } = req.body;
+
+  try {
+    const Teacher = await findTeacherById(id);
+    if (Teacher.length === 0) {
+      return res.status(404).json({ error: "Teacher member not found" });
+    }
+    
+    let hashedPassword = Teacher[0].password;
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
+
+    await updateTeacher(id, fullName, email, hashedPassword);
+    res.json({ message: "Teacher information updated successfully" });
+  } catch (error) {
+    console.error("Error updating Teacher information:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+async function deleteTeacherProfile(req, res) {
+  const { id } = req.body;
+
+  try {
+    const Teacher = await findTeacherById(id);
+    if (Teacher.length === 0) {
+      return res.status(404).json({ error: "Teacher member not found" });
+    }
+
+    await deleteTeacher(id);
+    res.json({ message: "Teacher profile deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting Teacher profile:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
 module.exports = {
   logout,
   signupTeacher,
   loginTeacher,
   getTeacher,
+  updateTeacherInfo,
+  deleteTeacherProfile,
 };

@@ -1,7 +1,12 @@
-
 const bcrypt = require("bcrypt");
 const { generateToken } = require("../middleware/jwtUtils");
-const { findUserByEmail, insertUser, findUserById } = require("../models/userModel");
+const { 
+  findUserByEmail, 
+  insertUser, 
+  findUserById, 
+  updateUserById, 
+  deleteUserById 
+} = require("../models/userModel");
 
 async function signup(req, res) {
   const { fullName, email, password } = req.body;
@@ -45,7 +50,6 @@ async function login(req, res) {
     });
     res.cookie("token", token, {
       httpOnly: true,
-      // maxAge: 60 * 60 * 1000,
     });
 
     return res.json({ msg: "success", id: user[0].id });
@@ -59,13 +63,53 @@ async function getUser(req, res) {
   const { id } = req.body;
   try {
     const user = await findUserById(id);
-    // console.log(teacher);
     if (user.length === 0) {
-      return res.status(404).json({ error: "User member not found" });
+      return res.status(404).json({ error: "User not found" });
     }
     res.json(user[0]);
   } catch (error) {
-    console.error("Error fetching user member:", error);
+    console.error("Error fetching user:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+async function updateUser(req, res) {
+  const { id } = req.body;
+  const { fullName, email, password } = req.body;
+
+  try {
+    const user = await findUserById(id);
+    if (user.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    let hashedPassword = user[0].password;
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
+
+    await updateUserById(id, fullName, email, hashedPassword);
+    return res.json({ message: "User updated successfully" });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+async function deleteUser(req, res) {
+  const { id } = req.body;
+
+  try {
+    const user = await findUserById(id);
+    if (user.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    await deleteUserById(id);
+    res.clearCookie("token", { httpOnly: true });
+    return res.json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting user:", error);
     return res.status(500).json({ error: "Internal server error" });
   }
 }
@@ -79,5 +123,7 @@ module.exports = {
   signup,
   login,
   logout,
-  getUser
+  getUser,
+  updateUser,
+  deleteUser,
 };

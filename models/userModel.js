@@ -14,8 +14,9 @@ async function createUserTable() {
 async function findUserByEmail(email) {
   return sql`SELECT * FROM users WHERE email = ${email}`;
 }
+
 async function findUserById(id) {
-  return sql`SELECT * FROM teacher WHERE id = ${id}`;
+  return sql`SELECT * FROM users WHERE id = ${id}`;
 }
 
 async function insertUser(fullName, email, hashedPassword) {
@@ -24,9 +25,29 @@ async function insertUser(fullName, email, hashedPassword) {
   `;
 }
 
+async function updateUserById(id, fullName, email, hashedPassword) {
+  return sql`
+    UPDATE users 
+    SET 
+      fullName = ${fullName}, 
+      email = ${email}, 
+      password = ${hashedPassword}
+    WHERE id = ${id}
+  `;
+}
+
+async function deleteUserById(id) {
+  return sql`
+    DELETE FROM users 
+    WHERE id = ${id}
+  `;
+}
+
 module.exports = {
   createUserTable,
   findUserByEmail,
   insertUser,
   findUserById,
+  updateUserById,
+  deleteUserById,
 };
