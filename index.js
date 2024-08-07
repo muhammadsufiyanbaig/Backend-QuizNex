@@ -9,7 +9,7 @@ const { createFacultyTable } = require("./models/facultyModel");
 const { createKeysTable } = require("./models/keyModel");
 const { createQuizTables } = require("./models/quizModel");
 const keyRoutes = require("./routes/keyRoutes");
-const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
 const facultyRoutes = require("./routes/facultyRoutes");
 const quizRoutes = require("./routes/quizRoutes");
 
@@ -40,7 +40,7 @@ async function initializeTables() {
 
 initializeTables();
 
-app.use("/auth", authRoutes);
+app.use("/", userRoutes);
 app.use("/faculty", facultyRoutes);
 app.use("/quiz", quizRoutes);
 app.use("/key", keyRoutes);

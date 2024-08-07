@@ -1,4 +1,4 @@
-const { getQuizData, insertResult, findResultByUserId } = require("../models/quizModel");
+const { getQuizData, insertResult, findResultByUserId, addMultipleQuestions, getUserScores } = require("../models/quizModel");
 const { shuffleArray, getCurrentTimeFormatted } = require("../utils/timeUtils");
 
 async function getQuiz(req, res) {
@@ -12,7 +12,7 @@ async function getQuiz(req, res) {
       options: row.options,
       correctAnswer: row.correctanswer,
     }));
-
+console.log(quizData);
     const frontendQuizData = quizData.map(
       ({ id, question, options, correctAnswer }) => ({
         id,
@@ -37,6 +37,16 @@ async function getQuiz(req, res) {
   }
 }
 
+async function addQuestions(req, res) {
+  const { TeacherId, data } = req.body;
+console.log(req.body);
+  try {
+    await addMultipleQuestions(parseInt(TeacherId), data);
+    res.json({ message: "Questions added successfully", success: true });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  } 
+}
 async function submitQuiz(req, res) {
   try {
     const fetchingQuiz = await getQuizData();
@@ -75,7 +85,24 @@ async function submitQuiz(req, res) {
   }
 }
 
+
+async function getScores(req, res) {
+  try {
+    const scores = await getUserScores();
+    console.log(scores);
+    if (scores.length === 0) {
+      return res.status(404).json({ error: "No scores found" });
+    }
+    res.json(scores);
+  } catch (error) {
+    console.error("Error fetching scores:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
 module.exports = {
+  getScores,
   getQuiz,
   submitQuiz,
+  addQuestions
 };

@@ -14,6 +14,9 @@ async function createUserTable() {
 async function findUserByEmail(email) {
   return sql`SELECT * FROM users WHERE email = ${email}`;
 }
+async function findUserById(id) {
+  return sql`SELECT * FROM faculty WHERE id = ${id}`;
+}
 
 async function insertUser(fullName, email, hashedPassword) {
   return sql`
@@ -25,4 +28,5 @@ module.exports = {
   createUserTable,
   findUserByEmail,
   insertUser,
+  findUserById,
 };

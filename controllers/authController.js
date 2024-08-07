@@ -1,6 +1,7 @@
+
 const bcrypt = require("bcrypt");
 const { generateToken } = require("../middleware/jwtUtils");
-const { findUserByEmail, insertUser } = require("../models/userModel");
+const { findUserByEmail, insertUser, findUserById } = require("../models/userModel");
 
 async function signup(req, res) {
   const { fullName, email, password } = req.body;
@@ -44,12 +45,27 @@ async function login(req, res) {
     });
     res.cookie("token", token, {
       httpOnly: true,
-      maxAge: 60 * 60 * 1000,
+      // maxAge: 60 * 60 * 1000,
     });
 
     return res.json({ msg: "success", id: user[0].id });
   } catch (error) {
     console.error("Error while comparing passwords:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+async function getUser(req, res) {
+  const { id } = req.body;
+  try {
+    const user = await findUserById(id);
+    // console.log(faculty);
+    if (user.length === 0) {
+      return res.status(404).json({ error: "User member not found" });
+    }
+    res.json(user[0]);
+  } catch (error) {
+    console.error("Error fetching user member:", error);
     return res.status(500).json({ error: "Internal server error" });
   }
 }
@@ -63,4 +79,5 @@ module.exports = {
   signup,
   login,
   logout,
+  getUser
 };

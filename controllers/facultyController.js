@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const { generateToken } = require("../middleware/jwtUtils");
 const { findFacultyByEmail, insertFaculty, findFacultyById } = require("../models/facultyModel");
 
-const keyCode = "GIAIC_FACULTY_2024";
+const keyCode = "QUIZWIZ_TEACHER";
 
 async function signupFaculty(req, res) {
   const { fullName, email, password, key } = req.body;
@@ -50,7 +50,7 @@ async function loginFaculty(req, res) {
     });
     res.cookie("token", token, {
       httpOnly: true,
-      maxAge: 60 * 60 * 1000,
+      // maxAge: 60 * 60 * 1000,
     });
 
     return res.json({ msg: "success", id: faculty[0].id });
