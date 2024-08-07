@@ -40,7 +40,7 @@ async function initializeTables() {
 
 initializeTables();
 
-app.use("/", userRoutes);
+app.use("/user", userRoutes);
 app.use("/teacher", TeacherRoutes);
 app.use("/quiz", quizRoutes);
 app.use("/key", keyRoutes);
