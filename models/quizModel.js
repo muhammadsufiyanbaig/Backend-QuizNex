@@ -43,7 +43,7 @@ async function addMultipleQuestions(TeacherId, questions) {
 }
 async function insertResult(userId, score, timestamp) {
   return sql`
-    INSERT INTO result (user_id, ts_quiz_score, ts_quiz_timestamp) VALUES (${userId}, ${score}, ${timestamp})
+    INSERT INTO result (user_id, quiz_score, quiz_timestamp) VALUES (${userId}, ${score}, ${timestamp})
   `;
 }
 
