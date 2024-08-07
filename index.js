@@ -5,12 +5,12 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const keyGenerator = require("./utils/keyGenerator");
 const { createUserTable } = require("./models/userModel");
-const { createFacultyTable } = require("./models/facultyModel");
+const { createTeacherTable } = require("./models/TeacherModel");
 const { createKeysTable } = require("./models/keyModel");
 const { createQuizTables } = require("./models/quizModel");
 const keyRoutes = require("./routes/keyRoutes");
 const userRoutes = require("./routes/userRoutes");
-const facultyRoutes = require("./routes/facultyRoutes");
+const TeacherRoutes = require("./routes/TeacherRoutes");
 const quizRoutes = require("./routes/quizRoutes");
 
 const app = express();
@@ -33,7 +33,7 @@ app.use(bodyParser.json());
 
 async function initializeTables() {
   await createUserTable();
-  await createFacultyTable();
+  await createTeacherTable();
   await createKeysTable();
   await createQuizTables();
 }
@@ -41,7 +41,7 @@ async function initializeTables() {
 initializeTables();
 
 app.use("/", userRoutes);
-app.use("/faculty", facultyRoutes);
+app.use("/teacher", TeacherRoutes);
 app.use("/quiz", quizRoutes);
 app.use("/key", keyRoutes);
 keyGenerator.start();
