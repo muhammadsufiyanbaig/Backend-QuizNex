@@ -1,11 +1,15 @@
 const bcrypt = require("bcrypt");
 const { generateToken } = require("../middleware/jwtUtils");
-const { findTeacherByEmail, insertTeacher, findTeacherById, updateTeacher, deleteTeacher } = require("../models/TeacherModel");
-
-const keyCode = "QUIZWIZ_TEACHER";
+const {
+  findTeacherByEmail,
+  insertTeacher,
+  findTeacherById,
+  updateTeacher,
+  deleteTeacher,
+} = require("../models/TeacherModel");
 
 async function signupTeacher(req, res) {
-  const { fullName, email, password, key } = req.body;
+  const { fullName, email, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
 
   try {
@@ -14,7 +18,7 @@ async function signupTeacher(req, res) {
       return res.status(400).json({ error: "Teacher member already exists" });
     }
 
-    if (keyCode === key) {
+    if (fullName && email && password) {
       await insertTeacher(fullName, email, hashedPassword);
       const token = generateToken({ email });
       res.json({ message: "Teacher member signed up successfully", token });
@@ -77,7 +81,9 @@ async function getTeacher(req, res) {
 
 async function logout(req, res) {
   res.cookie("token", "", { expires: new Date(0), httpOnly: true });
-  res.status(200).json({ success: true, message: "User logged out successfully" });
+  res
+    .status(200)
+    .json({ success: true, message: "User logged out successfully" });
 }
 
 async function updateTeacherInfo(req, res) {
@@ -88,7 +94,7 @@ async function updateTeacherInfo(req, res) {
     if (Teacher.length === 0) {
       return res.status(404).json({ error: "Teacher member not found" });
     }
-    
+
     let hashedPassword = Teacher[0].password;
     if (password) {
       hashedPassword = await bcrypt.hash(password, 10);
