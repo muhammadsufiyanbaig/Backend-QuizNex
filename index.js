@@ -12,6 +12,7 @@ const keyRoutes = require("./routes/keyRoutes");
 const userRoutes = require("./routes/userRoutes");
 const TeacherRoutes = require("./routes/TeacherRoutes");
 const quizRoutes = require("./routes/quizRoutes");
+const emailRoutes = require("./routes/emailRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -44,6 +45,7 @@ app.use("/user", userRoutes);
 app.use("/teacher", TeacherRoutes);
 app.use("/quiz", quizRoutes);
 app.use("/key", keyRoutes);
+app.use("/contact", emailRoutes);
 keyGenerator.start();
 
 app.listen(PORT, () => {
