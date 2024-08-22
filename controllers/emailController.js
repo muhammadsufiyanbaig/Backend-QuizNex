@@ -20,7 +20,7 @@ exports.sendEmail = async (req, res) => {
   let data;
   try {
     const emailHtml = ReactDOMServer.renderToString(
-      React.createElement(ContactFormEmail, { message, senderEmail })
+      React.createElement(ContactFormEmail, { message, senderEmail, senderName })
     );
 
     data = await resend.emails.send({
