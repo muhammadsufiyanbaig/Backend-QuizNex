@@ -7,7 +7,7 @@ const ContactFormEmail = require('../views/ContactFormEmail');
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 exports.sendEmail = async (req, res) => {
-  const { senderEmail, message } = req.body;
+  const { senderEmail, message, senderName } = req.body;
 
   // Simple server-side validation
   if (!validateString(senderEmail, 500)) {
@@ -24,7 +24,7 @@ exports.sendEmail = async (req, res) => {
     );
 
     data = await resend.emails.send({
-      from: 'From Portfolio contact Form <onboarding@resend.dev>',
+      from: 'From QuizNex contact Form <onboarding@resend.dev>',
       to: 'send.sufiyan@gmail.com',
       subject: 'Message from contact form',
       reply_to: senderEmail,
