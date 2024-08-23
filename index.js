@@ -21,8 +21,15 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://quizzical-keen.vercel.app" , "https://quiz-wiz-beta.vercel.app"],
-    methods: ["GET", "POST"],
+    origin: [
+      "http://localhost:3000",
+      "https://quizzical-keen.vercel.app",
+      "https://quiz-wiz-beta.vercel.app",
+      "https://quiz-wiz-dev.vercel.app",
+      "https://quizzen.vercel.app",
+      "https://quiznex.vercel.app",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
