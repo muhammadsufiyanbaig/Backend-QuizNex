@@ -10,14 +10,15 @@ async function sendOTP(email) {
   const otp = await generateAndStoreOTP(email);
   const subject = "Your OTP Code";
   const message = `Your OTP code is ${otp}. It is valid for a short period. Please do not share it with anyone.`;
-
+  let emails = [];
+  emails.push(email);
   try {
     const emailHtml = ReactDOMServer.renderToString(
       React.createElement(OTPEmail, { message, otp })
     );
     await resend.emails.send({
       from: "OTP from QuizNex <onboarding@resend.dev>",
-      to: [email],
+      to: email,
       subject: subject,
       text: message, 
       html: emailHtml, 
