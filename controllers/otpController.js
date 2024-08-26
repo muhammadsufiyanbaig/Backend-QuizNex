@@ -17,7 +17,7 @@ async function sendOTP(email) {
     );
     await resend.emails.send({
       from: "OTP from QuizNex <onboarding@resend.dev>",
-      to: email,
+      to: [email],
       subject: subject,
       text: message, 
       html: emailHtml, 
