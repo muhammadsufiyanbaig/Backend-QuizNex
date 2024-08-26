@@ -50,7 +50,7 @@ async function login(req, res) {
     });
     res.cookie("token", token, {
       httpOnly: true,
-    });
+    }); 
     return res.json({ msg: "success", id: user[0].id });
   } catch (error) {
     console.error("Error while comparing passwords:", error);
