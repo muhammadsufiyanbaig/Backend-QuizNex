@@ -1,5 +1,6 @@
 const { sql } = require('../utils/db');
 
+
 const OTP_EXPIRATION_TIME = 1 * 60 * 1000; 
 async function generateAndStoreOTP(email) {
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
