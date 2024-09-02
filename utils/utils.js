@@ -1,11 +1,14 @@
-exports.validateString = (str, maxLength) => {
-    return typeof str === 'string' && str.trim().length > 0 && str.length <= maxLength;
+// utils/keyGenerators.js
+
+const keyGenerator = (function () {
+  function generateRandomKey() {
+    const randomString = Math.random().toString(36).substr(2, 6);
+    return `${randomString}`;
+  }
+
+  return {
+    generateRandomKey
   };
-  
-  exports.getErrorMessage = (error) => {
-    if (error instanceof Error) {
-      return error.message;
-    }
-    return String(error);
-  };
-  
+})();
+
+module.exports = keyGenerator;

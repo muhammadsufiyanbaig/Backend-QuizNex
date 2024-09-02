@@ -23,7 +23,7 @@ async function signupTeacher(req, res) {
       const token = generateToken({ email });
       res.json({ message: "Teacher member signed up successfully", token });
     } else {
-      res.status(400).json({ error: "Invalid key" });
+      res.status(400).json({ error: "Invalid data" });
     }
   } catch (err) {
     return res.status(500).json({ error: "Internal server error" });
@@ -37,27 +37,24 @@ async function loginTeacher(req, res) {
   }
 
   try {
-    const Teacher = await findTeacherByEmail(email);
-    if (Teacher.length === 0) {
+    const teacher = await findTeacherByEmail(email);
+    if (teacher.length === 0) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    const passwordMatch = await bcrypt.compare(password, Teacher[0].password);
+    const passwordMatch = await bcrypt.compare(password, teacher[0].password);
     if (!passwordMatch) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
     const token = generateToken({
-      id: Teacher[0].id,
-      fullName: Teacher[0].fullName,
-      email: Teacher[0].email,
+      id: teacher[0].id,
+      fullName: teacher[0].fullName,
+      email: teacher[0].email,
     });
-    res.cookie("token", token, {
-      httpOnly: true,
-      // maxAge: 60 * 60 * 1000,
-    });
+    res.cookie("token", token, { httpOnly: true });
 
-    return res.json({ msg: "success", id: Teacher[0].id });
+    return res.json({ msg: "success", id: teacher[0].id });
   } catch (error) {
     console.error("Error while comparing passwords:", error);
     return res.status(500).json({ error: "Internal server error" });
@@ -67,12 +64,11 @@ async function loginTeacher(req, res) {
 async function getTeacher(req, res) {
   const { id } = req.body;
   try {
-    const Teacher = await findTeacherById(id);
-    // console.log(Teacher);
-    if (Teacher.length === 0) {
+    const teacher = await findTeacherById(id);
+    if (teacher.length === 0) {
       return res.status(404).json({ error: "Teacher member not found" });
     }
-    res.json(Teacher[0]);
+    res.json(teacher[0]);
   } catch (error) {
     console.error("Error fetching Teacher member:", error);
     return res.status(500).json({ error: "Internal server error" });
@@ -81,21 +77,19 @@ async function getTeacher(req, res) {
 
 async function logout(req, res) {
   res.cookie("token", "", { expires: new Date(0), httpOnly: true });
-  res
-    .status(200)
-    .json({ success: true, message: "User logged out successfully" });
+  res.status(200).json({ success: true, message: "User logged out successfully" });
 }
 
 async function updateTeacherInfo(req, res) {
   const { id, fullName, email, password } = req.body;
 
   try {
-    const Teacher = await findTeacherById(id);
-    if (Teacher.length === 0) {
+    const teacher = await findTeacherById(id);
+    if (teacher.length === 0) {
       return res.status(404).json({ error: "Teacher member not found" });
     }
 
-    let hashedPassword = Teacher[0].password;
+    let hashedPassword = teacher[0].password;
     if (password) {
       hashedPassword = await bcrypt.hash(password, 10);
     }
@@ -112,8 +106,8 @@ async function deleteTeacherProfile(req, res) {
   const { id } = req.body;
 
   try {
-    const Teacher = await findTeacherById(id);
-    if (Teacher.length === 0) {
+    const teacher = await findTeacherById(id);
+    if (teacher.length === 0) {
       return res.status(404).json({ error: "Teacher member not found" });
     }
 

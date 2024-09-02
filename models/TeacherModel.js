@@ -4,9 +4,9 @@ async function createTeacherTable() {
   await sql`
     CREATE TABLE IF NOT EXISTS teacher (
       id SERIAL PRIMARY KEY,
-      fullName TEXT,
-      email TEXT UNIQUE,
-      password TEXT
+      fullName TEXT NOT NULL,
+      email TEXT UNIQUE NOT NULL,
+      password TEXT NOT NULL
     )
   `;
 }
@@ -14,13 +14,14 @@ async function createTeacherTable() {
 async function findTeacherByEmail(email) {
   return sql`SELECT * FROM teacher WHERE email = ${email}`;
 }
+
 async function findTeacherById(id) {
   return sql`SELECT * FROM teacher WHERE id = ${id}`;
 }
 
 async function insertTeacher(fullName, email, hashedPassword) {
   return sql`
-    INSERT INTO Teacher (fullName, email, password) VALUES (${fullName}, ${email}, ${hashedPassword})
+    INSERT INTO teacher (fullName, email, password) VALUES (${fullName}, ${email}, ${hashedPassword})
   `;
 }
 
@@ -34,8 +35,7 @@ async function updateTeacher(id, fullName, email, password) {
 
 async function deleteTeacher(id) {
   return sql`
-    DELETE FROM teacher
-    WHERE id = ${id}
+    DELETE FROM teacher WHERE id = ${id}
   `;
 }
 

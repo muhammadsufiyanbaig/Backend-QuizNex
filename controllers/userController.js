@@ -88,7 +88,7 @@ async function updateUser(req, res) {
     }
 
     await updateUserById(id, fullName, email, hashedPassword);
-    return res.json({ message: "User updated successfully" });
+    return res.json({ message: "User updated successfully" , success: true });
   } catch (error) {
     console.error("Error updating user:", error);
     return res.status(500).json({ error: "Internal server error" });

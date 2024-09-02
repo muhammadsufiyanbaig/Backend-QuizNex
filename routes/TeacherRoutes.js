@@ -1,14 +1,13 @@
 const express = require("express");
-const { updateTeacherInfo, deleteTeacherProfile, signupTeacher, loginTeacher, getTeacher } = require("../controllers/TeacherController");
-const authenticate = require("../middleware/authMiddleware");
-const { logout } = require("../controllers/TeacherController");
 const router = express.Router();
+const TeacherController = require("../controllers/TeacherController");
 
-router.post("/signup", signupTeacher);
-router.post("/login", loginTeacher);
-router.post("/portal", authenticate, getTeacher);
-router.get("/logout", logout);
-router.put("/update", authenticate, updateTeacherInfo);
-router.delete("/delete", authenticate, deleteTeacherProfile);
+// Teacher routes
+router.post("/signup", TeacherController.signupTeacher);
+router.post("/login", TeacherController.loginTeacher);
+router.post("/get", TeacherController.getTeacher); // Changed from /portal to /get
+router.post("/logout", TeacherController.logout);
+router.put("/update", TeacherController.updateTeacherInfo);
+router.delete("/delete", TeacherController.deleteTeacherProfile);
 
 module.exports = router;

@@ -1,10 +1,11 @@
 const express = require("express");
-const { getQuiz, submitQuiz, addQuestions, getScores   } = require("../controllers/quizController");
-const authenticate = require("../middleware/authMiddleware");
 const router = express.Router();
+const QuizController = require("../controllers/quizController");
 
-router.post("/quizData", authenticate, getQuiz);
-router.post("/quiz", authenticate, submitQuiz);
-router.post("/addQuestions", authenticate, addQuestions);
-router.get("/scores", authenticate, getScores);
+// Quiz routes
+router.get("/quiz", QuizController.getQuiz); // Use query parameters for classId
+router.post("/submit", QuizController.submitResult);
+router.get("/results", QuizController.getResults);
+router.post("/add-questions", QuizController.addQuestions);
+
 module.exports = router;
