@@ -1,13 +1,16 @@
 const { sql } = require('../utils/db');
 
 async function createOtpsTable() {
-  await sql` CREATE TABLE IF NOT EXISTS otps (
-  id SERIAL PRIMARY KEY,
-  email VARCHAR(255) NOT NULL,
-  otp VARCHAR(6) NOT NULL,
-  expires_at TIMESTAMP NOT NULL
-)`;
+  await sql`
+    CREATE TABLE IF NOT EXISTS otps (
+      id SERIAL PRIMARY KEY,
+      email VARCHAR(255) NOT NULL,
+      otp VARCHAR(6) NOT NULL,
+      expires_at TIMESTAMP NOT NULL
+    )
+  `;
 }
+
 
 const OTP_EXPIRATION_TIME = 1 * 60 * 1000; 
 async function generateAndStoreOTP(email) {

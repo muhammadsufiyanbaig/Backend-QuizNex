@@ -41,14 +41,16 @@ app.use(express.json());
 app.use(bodyParser.json());
 
 async function initializeTables() {
-  await createTeacherTable ();
-  await createClassesTable();
-  await createOtpsTable();
-  await createUserTable();
-  await createQuizTables();
+  await createTeacherTable();   // Create teachers table first
+  await createUserTable();      // Create users (students) table next
+  await createClassesTable();   // Create classes table after users and teachers
+  await createQuizTables();     // Create quizData and result tables after classes and teacher
+  await createOtpsTable();      // Create otps table last as it's independent
 }
 
+// Initialize all tables
 initializeTables();
+
 
 app.use("/user", userRoutes);
 app.use("/teacher", TeacherRoutes);

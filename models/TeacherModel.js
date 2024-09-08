@@ -2,10 +2,10 @@ const { sql } = require('../utils/db');
 
 async function createTeacherTable() {
   await sql`
-    CREATE TABLE IF NOT EXISTS teacher (
+    CREATE TABLE IF NOT EXISTS teachers (
       id SERIAL PRIMARY KEY,
       fullName TEXT NOT NULL,
-      email TEXT UNIQUE NOT NULL,
+      email VARCHAR(255) UNIQUE NOT NULL,
       password TEXT NOT NULL
     )
   `;

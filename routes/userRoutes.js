@@ -6,8 +6,8 @@ const router = express.Router();
 router.post("/signup", signup);
 router.post("/login", login);
 router.get("/logout", logout);
-router.post("/portal", authenticate, getUser);
-router.put("/update", authenticate, updateUser);
-router.delete("/delete", authenticate, deleteUser);
+router.post("/portal", getUser);
+router.put("/update", updateUser);
+router.delete("/delete", deleteUser);
 
 module.exports = router;

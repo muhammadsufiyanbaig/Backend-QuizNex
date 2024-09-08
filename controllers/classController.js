@@ -2,10 +2,10 @@ const { insertClass, findClassByKey, findClassesByTeacherId, deleteClass } = req
 const keyGenerator = require("../utils/keyGenerator");
 
 async function createClass(req, res) {
-  const { className, teacherId } = req.body;
+  const { className, teacherId, duration } = req.body;
   const classKey = keyGenerator.generateRandomKey();
   try {
-    await insertClass(className, classKey, teacherId);
+    await insertClass(className, classKey, teacherId, duration);
     res.json({ message: "Class created successfully", classKey });
   } catch (error) {
     console.error("Error creating class:", error.message);
@@ -14,7 +14,7 @@ async function createClass(req, res) {
 }
 
 async function getClassByKey(req, res) {
-  const { classKey } = req.query; // use query parameters instead of URL parameters
+  const { classKey } = req.query; 
   
   try {
     const classData = await findClassByKey(classKey);
@@ -27,12 +27,13 @@ async function getClassByKey(req, res) {
     return res.status(500).json({ error: "Internal server error" });
   }
 }
-
 async function getClassesByTeacherId(req, res) {
-  const { teacherId } = req.query; // use query parameters instead of URL parameters
-  
+  const { teacherId } = req.body;
+  console.log("Received teacherId:", teacherId); 
+
   try {
     const classes = await findClassesByTeacherId(teacherId);
+    console.log("Classes found:", classes); 
     res.json(classes);
   } catch (error) {
     console.error("Error fetching classes for teacher:", error);

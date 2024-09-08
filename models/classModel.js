@@ -6,17 +6,20 @@ async function createClassesTable() {
       id SERIAL PRIMARY KEY,
       className TEXT NOT NULL,
       classKey TEXT UNIQUE NOT NULL,
+      quizDuration TEXT NOT NULL,
       teacherid INT NOT NULL,
-      FOREIGN KEY (teacherid) REFERENCES teacher(id) ON DELETE CASCADE
+      userid INT NOT NULL,
+      FOREIGN KEY (teacherid) REFERENCES teachers(id) ON DELETE CASCADE,
+      FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE
     )
   `;
 }
 
 // Insert a new class
-async function insertClass(className, classKey, teacherId) {
+async function insertClass(className, classKey, teacherId, duration) {
   return sql`
-    INSERT INTO classes (className, classKey, teacherid)
-    VALUES (${className}, ${classKey}, ${teacherId})
+    INSERT INTO classes (className, classKey, teacherid, quizDuration)
+    VALUES (${className}, ${classKey}, ${teacherId}, ${duration})
   `;
 }
 
@@ -28,7 +31,7 @@ async function findClassByKey(classKey) {
 
 // Find all classes by teacherId
 async function findClassesByTeacherId(teacherId) {
-  return sql`SELECT * FROM classes WHERE teacherId = ${teacherId}`;
+  return sql`SELECT * FROM classes WHERE teacherid = ${teacherId}`;
 }
 
 // Delete a class by ID

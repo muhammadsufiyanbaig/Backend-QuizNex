@@ -1,14 +1,15 @@
-const { getQuizData, insertResult, findResultByUserId, addMultipleQuestions, getUserScores } = require("../models/quizModel");
+const { getQuizData, insertResult, findResultByUserId, addMultipleQuestions, getUserScores, getQuizDuratoin } = require("../models/quizModel");
 const { getCurrentTimeFormatted } = require("../utils/timeUtils");
 
 async function getQuiz(req, res) {
-  const { classId } = req.query; // use query parameters instead of URL parameters
+  const { classId } = req.query;
   try {
     const quizData = await getQuizData(classId);
+    const quizDuration = await getQuizDuratoin(classId);
     if (quizData.length === 0) {
       return res.status(404).json({ error: "No quiz data found for this class" });
     }
-    res.json(quizData);
+    res.json({ quizData, duration: quizDuration});
   } catch (error) {
     console.error("Error fetching quiz data:", error);
     return res.status(500).json({ error: "Internal server error" });

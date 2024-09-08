@@ -1,5 +1,6 @@
 const { sql } = require('../utils/db');
 
+
 async function createQuizTables() {
   await sql`
     CREATE TABLE IF NOT EXISTS quizData (
@@ -7,19 +8,22 @@ async function createQuizTables() {
       question TEXT NOT NULL,
       options TEXT[] NOT NULL,
       correctAnswer TEXT[] NOT NULL,
-      teacher INT,
+      teacherid INT,
       class_id INT,
-      FOREIGN KEY (teacher) REFERENCES teacher(id) ON DELETE CASCADE,
+      FOREIGN KEY (teacherid) REFERENCES teachers(id) ON DELETE CASCADE,
       FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE
     )
   `;
-  
+
   await sql`
     CREATE TABLE IF NOT EXISTS result (
-      user_id INT PRIMARY KEY,
+      user_id INT,
+      class_id INT,
       quiz_score INT NOT NULL,
       quiz_timestamp TIMESTAMP NOT NULL DEFAULT NOW(),
-      FOREIGN KEY (user_id) REFERENCES students(id) ON DELETE CASCADE
+      PRIMARY KEY (user_id, class_id),
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+      FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE
     )
   `;
 }
@@ -28,6 +32,14 @@ async function getQuizData(classId) {
   return sql`
     SELECT id, question, options, correctAnswer 
     FROM quizData 
+    WHERE class_id = ${classId}
+  `;
+}
+
+async function getQuizDuratoin(classId) {
+  return sql`
+    SELECT quizDuration
+    FROM classes 
     WHERE class_id = ${classId}
   `;
 }
@@ -67,6 +79,7 @@ async function getUserScores() {
 }
 
 module.exports = {
+  getQuizDuratoin,
   createQuizTables,
   getQuizData,
   addMultipleQuestions,

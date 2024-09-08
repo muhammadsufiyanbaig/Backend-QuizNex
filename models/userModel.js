@@ -1,11 +1,12 @@
 const { sql } = require('../utils/db');
 
+
 async function createUserTable() {
   await sql`
     CREATE TABLE IF NOT EXISTS users (
       id SERIAL PRIMARY KEY,
       fullName TEXT,
-      email TEXT UNIQUE,
+      email VARCHAR(255) UNIQUE,
       password TEXT
     )
   `;

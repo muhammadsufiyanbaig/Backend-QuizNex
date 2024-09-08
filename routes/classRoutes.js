@@ -5,7 +5,7 @@ const ClassController = require("../controllers/classController");
 // Class routes
 router.post("/create", ClassController.createClass);
 router.post("/get", ClassController.getClassByKey); // Use query parameters for classKey
-router.get("/by-teacher", ClassController.getClassesByTeacherId); // Use query parameters for teacherId
+router.post("/by-teacher", ClassController.getClassesByTeacherId); // Use query parameters for teacherId
 router.delete("/delete", ClassController.deleteClassById);
 
 module.exports = router;
