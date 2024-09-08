@@ -29,11 +29,11 @@ async function getClassByKey(req, res) {
 }
 async function getClassesByTeacherId(req, res) {
   const { teacherId } = req.body;
-  console.log("Received teacherId:", teacherId); 
+  // console.log("Received teacherId:", teacherId); 
 
   try {
     const classes = await findClassesByTeacherId(teacherId);
-    console.log("Classes found:", classes); 
+    // console.log("Classes found:", classes); 
     res.json(classes);
   } catch (error) {
     console.error("Error fetching classes for teacher:", error);
