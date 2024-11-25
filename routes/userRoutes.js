@@ -1,13 +1,15 @@
 const express = require("express");
-const { signup, login, logout, getUser, updateUser, deleteUser } = require("../controllers/userController");
-const authenticate = require("../middleware/authMiddleware");
 const router = express.Router();
+const userController = require('../controllers/userController');
 
-router.post("/signup", signup);
-router.post("/login", login);
-router.get("/logout", logout);
-router.post("/portal", getUser);
-router.put("/update", updateUser);
-router.delete("/delete", deleteUser);
+// User registration and profile routes
+router.post('/register', userController.registerUser);
+router.post('/login', userController.loginUser);
+router.get('/profile', userController.getProfile);
+router.put('/profile', userController.updateProfile);
+
+// Class-related routes for users
+router.post('/join-class', userController.joinClass);
+router.get('/my-classes', userController.getMyClasses);
 
 module.exports = router;

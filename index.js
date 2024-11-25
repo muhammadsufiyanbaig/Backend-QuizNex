@@ -3,22 +3,18 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
-// const keyGenerator = require("./utils/keyGenerator");
-const { createUserTable } = require("./models/userModel");
-const { createTeacherTable } = require("./models/TeacherModel");
-const { createClassesTable } = require("./models/classModel");
-const { createOtpsTable } = require("./models/otpModel");
-const { createQuizTables } = require("./models/quizModel");
-const userRoutes = require("./routes/userRoutes");
-const TeacherRoutes = require("./routes/TeacherRoutes");
-const quizRoutes = require("./routes/quizRoutes");
-const emailRoutes = require("./routes/emailRoutes");
-const otpRoutes = require("./routes/otpRoutes");
-const classRoutes = require("./routes/classRoutes");
+// const userRoutes = require("./routes/userRoutes");
+// const TeacherRoutes = require("./routes/TeacherRoutes");
+// const quizRoutes = require("./routes/quizRoutes");
+// const emailRoutes = require("./routes/emailRoutes");
+// const otpRoutes = require("./routes/otpRoutes");
+// const classRoutes = require("./routes/classRoutes");
+const authRoutes = require('./routes/authRoutes');
+const { initializeDatabase } = require("./models/Schema");
 
 
 const app = express();
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
 
 app.use(cookieParser());
 
@@ -40,24 +36,17 @@ app.options("*", cors());
 app.use(express.json());
 app.use(bodyParser.json());
 
-async function initializeTables() {
-  await createTeacherTable();   // Create teachers table first
-  await createUserTable();      // Create users (students) table next
-  await createClassesTable();   // Create classes table after users and teachers
-  await createQuizTables();     // Create quizData and result tables after classes and teacher
-  await createOtpsTable();      // Create otps table last as it's independent
-}
-
 // Initialize all tables
-initializeTables();
+initializeDatabase();
 
 
-app.use("/user", userRoutes);
-app.use("/teacher", TeacherRoutes);
-app.use("/quiz", quizRoutes);
-app.use("/contact", emailRoutes);
-app.use("/otp", otpRoutes);
-app.use("/class", classRoutes);
+app.use('/auth', authRoutes);
+// app.use("/user", userRoutes);
+// app.use("/teacher", TeacherRoutes);
+// app.use("/quiz", quizRoutes);
+// app.use("/contact", emailRoutes);
+// app.use("/otp", otpRoutes);
+// app.use("/class", classRoutes);
 
 
 app.listen(PORT, () => {

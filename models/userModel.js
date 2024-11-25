@@ -1,54 +1,32 @@
 const { sql } = require('../utils/db');
 
-
-async function createUserTable() {
-  await sql`
-    CREATE TABLE IF NOT EXISTS users (
-      id SERIAL PRIMARY KEY,
-      fullName TEXT,
-      email VARCHAR(255) UNIQUE,
-      password TEXT
-    )
-  `;
+async function createUser(fullName, email, username, hashedPassword) {
+  return sql`INSERT INTO users (fullName, email, username, password)
+             VALUES (${fullName}, ${email}, ${username}, ${hashedPassword})`;
 }
 
-async function findUserByEmail(email) {
+async function getUserByEmail(email) {
   return sql`SELECT * FROM users WHERE email = ${email}`;
 }
 
-async function findUserById(id) {
-  return sql`SELECT * FROM users WHERE id = ${id}`;
+async function getUserByUsername(username) {
+  return sql`SELECT * FROM users WHERE username = ${username}`;
 }
 
-async function insertUser(fullName, email, hashedPassword) {
-  return sql`
-    INSERT INTO users (fullName, email, password) VALUES (${fullName}, ${email}, ${hashedPassword})
-  `;
+async function updateUser(email, updates) {
+  return sql`UPDATE users
+             SET fullName = ${updates.fullName}, username = ${updates.username}
+             WHERE email = ${email}`;
 }
 
-async function updateUserById(id, fullName, email, hashedPassword) {
-  return sql`
-    UPDATE users 
-    SET 
-      fullName = ${fullName}, 
-      email = ${email}, 
-      password = ${hashedPassword}
-    WHERE id = ${id}
-  `;
-}
-
-async function deleteUserById(id) {
-  return sql`
-    DELETE FROM users 
-    WHERE id = ${id}
-  `;
+async function deleteUser(email) {
+  return sql`DELETE FROM users WHERE email = ${email}`;
 }
 
 module.exports = {
-  createUserTable,
-  findUserByEmail,
-  insertUser,
-  findUserById,
-  updateUserById,
-  deleteUserById,
+  createUser,
+  getUserByEmail,
+  getUserByUsername,
+  updateUser,
+  deleteUser,
 };

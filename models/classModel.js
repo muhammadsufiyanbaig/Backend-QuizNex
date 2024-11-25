@@ -1,20 +1,4 @@
 const { sql } = require('../utils/db');
-
-async function createClassesTable() {
-  await sql`
-    CREATE TABLE IF NOT EXISTS classes (
-      id SERIAL PRIMARY KEY,
-      className TEXT NOT NULL,
-      classKey TEXT UNIQUE NOT NULL,
-      quizDuration TEXT NOT NULL,
-      teacherid INT NOT NULL,
-      userid INT NOT NULL,
-      FOREIGN KEY (teacherid) REFERENCES teachers(id) ON DELETE CASCADE,
-      FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE
-    )
-  `;
-}
-
 // Insert a new class
 async function insertClass(className, classKey, teacherId, duration) {
   return sql`
@@ -40,7 +24,6 @@ async function deleteClass(classId) {
 }
 
 module.exports = {
-  createClassesTable,
   insertClass,
   findClassByKey,
   findClassesByTeacherId,
