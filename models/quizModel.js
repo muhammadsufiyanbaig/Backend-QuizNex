@@ -44,7 +44,7 @@ async function findResultByUserId(userId) {
 
 async function getUserScores() {
   return sql`
-    SELECT u.fullName, u.email, r.quiz_score, r.quiz_timestamp
+    SELECT u.name, u.email, r.quiz_score, r.quiz_timestamp
     FROM students u
     JOIN result r ON u.id = r.user_id
   `;

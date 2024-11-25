@@ -8,11 +8,14 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 // Signup
 async function signup(req, res) {
-  const { fullName, email, username, password } = req.body;
+  const { name, email, username, password, phoneNumber, type } = req.body;
+  console.log("Name:",name, "Email:",email, "UserName:",username, "Password:",password, phoneNumber, type);
+  
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-
+    console.log("Hashed Password:", hashedPassword);
+    
     // Check if email already exists
     const existingUser = (await getUserByEmail(email))[0];
     if (existingUser) return res.status(409).json({ error: 'Email already exists.' });
@@ -22,8 +25,8 @@ async function signup(req, res) {
     if (existingUsername) return res.status(409).json({ error: 'Username already exists.' });
 
     // Create the user
-    await createUser(fullName, email, username, hashedPassword);
-    res.status(201).json({ message: 'User registered successfully.' });
+    await createUser(name, email, username, hashedPassword, phoneNumber, type);
+    res.status(200).json({ message: 'User registered successfully.' });
   } catch (error) {
     res.status(500).json({ error: 'Failed to register user.' });
   }

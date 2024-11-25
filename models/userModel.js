@@ -1,8 +1,8 @@
 const { sql } = require('../utils/db');
 
-async function createUser(fullName, email, username, hashedPassword) {
-  return sql`INSERT INTO users (fullName, email, username, password)
-             VALUES (${fullName}, ${email}, ${username}, ${hashedPassword})`;
+async function createUser(name, email, username, hashedPassword, phoneNumber, type) {
+  return sql`INSERT INTO Users (name, email, username, password, phoneNumber, type)
+             VALUES (${name}, ${email}, ${username}, ${hashedPassword}, ${phoneNumber}, ${type})`;
 }
 
 async function getUserByEmail(email) {
@@ -15,7 +15,7 @@ async function getUserByUsername(username) {
 
 async function updateUser(email, updates) {
   return sql`UPDATE users
-             SET fullName = ${updates.fullName}, username = ${updates.username}
+             SET name = ${updates.name}, username = ${updates.username}
              WHERE email = ${email}`;
 }
 
